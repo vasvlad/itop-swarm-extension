@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension format="1.0">
+  <extension_code>swarm-extension</extension_code>
+  <version>1.0.2</version>
+  <label><![CDATA[Swarm iTop Extension]]></label>
+  <description><![CDATA[Swarm(Docker) extension]]></description>
+  <author><![CDATA[Uladzislau Vasilyeu]]></author>
+  <mandatory>false</mandatory>
+  <more_info_url></more_info_url>
+  <release_date><![CDATA[2024-01-06]]></release_date>
+  <itop_version_min><![CDATA[2.7.0]]></itop_version_min>
+  <status>stable</status>
+  <more_info_url><![CDATA[https://github.com/vasvlad/itop-swarm-extension/blob/main/README.md]]></more_info_url>
+</extension>

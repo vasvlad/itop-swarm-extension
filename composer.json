@@ -1,0 +1,16 @@
+{
+  "config": {
+    "classmap-authoritative": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Sample\\iTop\\Extension\\": "src"
+    }
+  },
+  "name": "swarm",
+  "type": "itop-extension",
+  "description": "Swarm iTop Extension",
+  "require": {
+    "composer-runtime-api": "^2.0"
+  }
+}

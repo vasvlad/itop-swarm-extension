@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itop_design xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.6">
+    <!--
+    * @copyright   Copyright (C) 2024 Uladzislau Vasilyeu
+    * @license     http://www.apache.org/licenses/LICENSE-2.0
+    -->
+  <classes>
+      <class id="FunctionalCI" _delta="must_exist">
+          <fields>
+              <field id="swarm_id" xsi:type="AttributeExternalKey" _delta="define">
+                <is_null_allowed>true</is_null_allowed>
+                <target_class>Swarm</target_class>
+                <sql>swarm_id</sql>
+                <tracking_level>all</tracking_level>
+                <display_style>list</display_style>
+              </field>
+          </fields>
+      </class>    
+      <class id="Swarm" _delta="define">
+      <parent>FunctionalCI</parent>
+      <properties>
+        <category>bizmodel,searchable</category>
+        <abstract>false</abstract>
+        <key_type>autoincrement</key_type>
+        <db_table>swarm</db_table>
+        <db_key_field>id</db_key_field>
+        <db_final_class_field/>
+        <naming>
+          <attributes>
+            <attribute id="name"/>
+          </attributes>
+        </naming>
+        <display_template/>
+        <icon>images/swarm_icon.png</icon>
+        <reconciliation>
+          <attributes>
+            <attribute id="name"/>
+            <attribute id="org_id"/>
+            <attribute id="organization_name"/>
+          </attributes>
+        </reconciliation>
+      </properties>
+      <fields>
+          <field id="server_list" xsi:type="AttributeLinkedSet">
+          <linked_class>FunctionalCI</linked_class>
+          <ext_key_to_me>swarm_id</ext_key_to_me>
+          <edit_mode>add_remove</edit_mode>
+          <count_min>0</count_min>
+          <count_max>0</count_max>
+        </field>
+      </fields>
+      <methods/>
+
+      <relations>
+        <relation id="impacts">
+            <neighbours>
+                <neighbour id="swarm_swarm" _delta="define">
+                <query_down>
+                    SELECT FunctionalCI AS o WHERE o.swarm_id = -1
+                </query_down>
+                <query_up>
+                    SELECT FunctionalCI AS o WHERE o.swarm_id = :this->id
+                </query_up>
+                </neighbour>
+            </neighbours>
+        </relation>
+      </relations>
+
+      <presentation>
+        <details>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>20</rank>
+            </item>
+            <item id="description">
+              <rank>130</rank>
+            </item>
+            <item id="contacts_list">
+              <rank>140</rank>
+            </item>
+            <item id="tickets_list">
+              <rank>160</rank>
+            </item>
+            <item id="providercontracts_list">
+              <rank>170</rank>
+            </item>
+            <item id="services_list">
+              <rank>180</rank>
+            </item>
+            <item id="server_list">
+              <rank>190</rank>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="name">
+              <rank>10</rank>
+            </item>
+            <item id="org_id">
+              <rank>20</rank>
+            </item>
+          </items>
+        </search>
+        <list>
+          <items>
+            <item id="org_id">
+              <rank>10</rank>
+            </item>
+            <item id="server_list">
+              <rank>20</rank>
+            </item>
+          </items>
+        </list>
+      </presentation>
+    </class>
+    <class id="SoftwareInstance" _delta="must_exist">
+      <fields>
+        <field id="system_id" xsi:type="AttributeExternalKey" _delta="redefine">
+          <filter _delta="redefine"><![CDATA[SELECT FunctionalCI WHERE finalclass IN ('Server','VirtualMachine','PC', 'Swarm')]]></filter>
+          <sql>functionalci_id</sql>
+          <target_class>FunctionalCI</target_class>
+          <is_null_allowed>false</is_null_allowed>
+          <on_target_delete>DEL_AUTO</on_target_delete>
+          <allow_target_creation>false</allow_target_creation>
+        </field>
+      </fields>
+    </class>
+    <class id="Server" _delta="must_exist">
+      <presentation>
+        <details>
+          <items>
+            <item id="col:col1">
+              <rank>120</rank>
+              <items>
+                <item id="fieldset:Server:moreinfo">
+                  <rank>20</rank>
+                  <items>
+                    <item id="swarm_id" _delta="define">
+                      <rank>45</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="swarm_id" _delta="define">
+              <rank>55</rank>
+            </item>
+          </items>
+        </search>
+      </presentation>
+      <relations>
+        <relation id="impacts">
+            <neighbours>
+                <neighbour id="swarm" _delta="define">
+                <query_down>
+                    SELECT Swarm AS o WHERE o.id = :this->swarm_id
+                </query_down>
+                <query_up>
+                    SELECT Swarm AS o WHERE o.id = :this->swarm_id
+                </query_up>
+                </neighbour>
+            </neighbours>
+        </relation>
+      </relations>
+    </class>
+   <class id="VirtualMachine" _delta="if_exists">
+      <presentation>
+        <details>
+          <items>
+            <item id="col:col1">
+              <rank>120</rank>
+              <items>
+                <item id="fieldset:Server:moreinfo">
+                  <rank>20</rank>
+                  <items>
+                    <item id="swarm_id" _delta="define">
+                      <rank>45</rank>
+                    </item>
+                  </items>
+                </item>
+              </items>
+            </item>
+          </items>
+        </details>
+        <search>
+          <items>
+            <item id="swarm_id" _delta="define">
+              <rank>55</rank>
+            </item>
+          </items>
+        </search>
+      </presentation>
+      <relations>
+        <relation id="impacts">
+            <neighbours>
+                <neighbour id="swarm" _delta="define">
+                <query_down>
+                    SELECT Swarm AS o WHERE o.id = :this->swarm_id
+                </query_down>
+                <query_up>
+                    SELECT Swarm AS o WHERE o.id = :this->swarm_id
+                </query_up>
+                </neighbour>
+            </neighbours>
+        </relation>
+      </relations>
+    </class>
+
+  </classes>
+    <dictionaries>
+        <dictionary id="EN US">
+            <entries>
+                <entry id="Server:swarm_id" _delta="define">Swarm Configuration</entry>
+                <entry id="Class:Swarm/Attribute:server_list" _delta="define">Swarm nodes list</entry>
+                <entry id="Class:FunctionalCI/Attribute:swarm_id" _delta="define">Swarm(Docker)</entry>
+                <entry id="Class:FunctionalCI/Attribute:swarm_id+" _delta="define">Docker Swarm system</entry>
+                <entry id="Class:Swarm" _delta="define">Swarm(Docker)</entry>
+                <entry id="Class:Swarm+" _delta="define">Docker Swarm Additional information</entry>
+            </entries>
+        </dictionary>
+        <dictionary id="RU RU">
+            <entries>
+                <entry id="Server:swarm_id" _delta="define">Конфигурация Swarm</entry>
+                <entry id="Class:Swarm/Attribute:server_list" _delta="define">Список узлов Swarm</entry>
+                <entry id="Class:FunctionalCI/Attribute:swarm_id" _delta="define">Swarm(Docker)</entry>
+                <entry id="Class:FunctionalCI/Attribute:swarm_id+" _delta="define">Оркестрация Docker Swarm</entry>
+                <entry id="Class:Swarm" _delta="define">Swarm(Docker)</entry>
+                <entry id="Class:Swarm+" _delta="define">Docker Swarm Дополнительная информация</entry>
+            </entries>
+        </dictionary>
+
+    </dictionaries>
+<menus>
+  <menu id="ConfigManagementOverview" xsi:type="DashboardMenuNode" _delta="must_exist">
+    <definition>
+      <cells>
+        <cell id="3" _delta="must_exist">
+          <dashlets>
+            <dashlet id="99" xsi:type="DashletBadge" _delta="define">
+              <rank>8</rank>
+              <class>Swarm</class>
+            </dashlet>
+          </dashlets>
+        </cell>
+      </cells>
+    </definition>
+  </menu>
+</menus>
+ <user_rights> 
+    <groups> 
+      <group id="General" _delta="must_exist"> 
+        <classes> 
+          <class id="Swarm" _delta="define"/> 
+        </classes> 
+      </group> 
+    </groups> 
+  </user_rights>
+
+  <profiles>
+  </profiles>
+</itop_design>
